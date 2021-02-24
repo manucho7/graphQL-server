@@ -5,6 +5,7 @@ const http = require('http');
 require('dotenv').config();
 const { fileLoader, mergeTypes } = require('merge-graphql-schemas');
 const path = require('path');
+const { mergeResolvers } = require('graphql-tools');
 
 //initializing express server 
 const app = express();
@@ -14,12 +15,8 @@ const typeDefs = mergeTypes(fileLoader(path.join(__dirname, '/typeDefs')));
 
 //resolvers fn that will resolve the query
 
-const resolvers = {
-    Query: {
-        totalPosts: () => 42,
-        me: () => 'Manuel Blanco'
-    }
-};
+const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
+
 
 //GraphQL server
 const apolloServer = new ApolloServer({
