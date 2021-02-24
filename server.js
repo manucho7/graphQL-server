@@ -3,22 +3,21 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const http = require('http');
 require('dotenv').config();
+const { fileLoader, mergeTypes } = require('merge-graphql-schemas');
+const path = require('path');
 
-//initializing express server | req-res handler
+//initializing express server 
 const app = express();
 
-//graphql query
-const typeDefs = `
-    type Query {
-        totalPosts: Int!
-    }
-`
+//typeDefs
+const typeDefs = mergeTypes(fileLoader(path.join(__dirname, '/typeDefs')));
 
 //resolvers fn that will resolve the query
 
 const resolvers = {
     Query: {
-        totalPosts: () => 42
+        totalPosts: () => 42,
+        me: () => 'Manuel Blanco'
     }
 };
 
