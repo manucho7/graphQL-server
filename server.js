@@ -6,9 +6,28 @@ require('dotenv').config();
 const { fileLoader, mergeTypes } = require('merge-graphql-schemas');
 const path = require('path');
 const { mergeResolvers } = require('graphql-tools');
+const mongoose = require('mongoose');
 
 //initializing express server 
 const app = express();
+
+//db
+const db = async () => {
+    try {
+        const success = await mongoose.connect(process.env.DATABASE_CLOUD, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useCreateIndex: true,
+            useFindAndModify: false
+        });
+        console.log('DB is online');
+    } catch (error) {
+        console.log('DB connection error', error);
+    }
+}
+
+//execute db connection
+db();
 
 //typeDefs
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, '/typeDefs')));
